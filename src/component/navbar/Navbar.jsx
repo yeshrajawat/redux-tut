@@ -1,6 +1,12 @@
 import React from 'react'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './Navbar.scss';
 const Navbar = () => {
+
+
+  const selector = useSelector((state) => state.cart);
+
   return (
     <div className='nav'>
         <div className="left">
@@ -8,9 +14,9 @@ const Navbar = () => {
         </div>
        
         <div className="right">
-            <p>Home</p>
-            <p>Cart</p>
-            <p style={{"fontWeight":"bold"}}>CART ITEMS: <span>0</span></p>
+          <Link to='/' > <p>Home</p> </Link>  
+          <Link to='/cart'> <p>Cart</p> </Link>
+            <p style={{"fontWeight":"bold"}}>CART ITEMS: <span>{selector.length}</span></p>
         </div>
     </div>
   )
