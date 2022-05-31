@@ -1,25 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import './Products.scss';
 import { add } from '../../store/cartSlice';
-import { useDispatch } from 'react-redux';
-
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../../store/productSlice';
+ import { STATUS } from '../../store/productSlice';
 
 const Products = () => {
 
+    const {data:products,status}  = useSelector((state) => state.product);
+
     const dispatch = useDispatch();
-    const [products,setProducts] = useState([]);
-
-
+    
     useEffect(()=> {
-        const fetchProducts = async()=> {
-            const res = await fetch('https://fakestoreapi.com/products/')
-            const data = await res.json();
-            console.log(data);
-            setProducts(data);
+        //  const fetchProducts = async()=> {
+        //     const res = await fetch('https://fakestoreapi.com/products/')
+        //     const data = await res.json();
+        //     console.log(data);
+        //     setProducts(data);
 
-        }
-        fetchProducts();
+        // }
+        // fetchProducts();
+        dispatch(fetchProducts());
     },[]);
 
     const handleAdd = (product) => {
@@ -28,9 +29,21 @@ const Products = () => {
 
     }
 
+    if(status === STATUS.LOADING){
+        console.log(status);
+        return (
+            <h2>Loading.....</h2>
+        );
+    }
+    else if(status === STATUS.ERROR){
+        return (
+            <h2>Error</h2>
+        )
+    }
     return (
     <div className='productsWrapper'>
 
+            
         {products.map( (product) =>  {
 
           return  <div className="card" key={product.id}>
